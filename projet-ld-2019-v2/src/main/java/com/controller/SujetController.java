@@ -26,6 +26,7 @@ public class SujetController {
 			SujetDao SujetDao = new SujetDao(); 
 			List<Sujet> listeSujets = new ArrayList<Sujet>(); 
 			listeSujets = SujetDao.selectAll();
+			System.out.println(listeSujets);
 			return listeSujets; 
 		}
 

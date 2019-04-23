@@ -1,59 +1,89 @@
 package com.model;
 
 public class Sujet {
-	String codeCommune; 
-	String nomCommune; 
-	String codePostal; 
-	String latitude; 
-	String longitude; 
+	String idSujet; 
+	String titre; 
+	String description; 
+	String nbrMinEleves; 
+	String nbrMaxEleves; 
+	String contratPro; 
+	String confidentialite; 
+	String etat; 
 	
-	public Sujet(String codeCommune,String nomCommune, String codePostal, String latitude, String longitude ) {
+	public Sujet(String idSujet,String titre, String description, String nbrMinEleves, String nbrMaxEleves, String contratPro, String confidentialite, String etat ) {
 		super(); 
-		this.codeCommune=codeCommune; 
-		this.nomCommune=nomCommune;
-		this.codePostal=codePostal; 
-		this.latitude=latitude; 
-		this.longitude=longitude; 
+		this.idSujet=idSujet; 
+		this.titre=titre;
+		this.description=description; 
+		this.nbrMinEleves=nbrMinEleves; 
+		this.nbrMaxEleves=nbrMaxEleves; 
+		this.contratPro=contratPro; 
+		this.confidentialite=confidentialite; 
+		this.etat=etat; 
 	}
 
-	public String getCodeCommune() {
-		return codeCommune;
+	public String getIdSujet() {
+		return idSujet;
 	}
 
-	public void setCodeCommune(String codeCommune) {
-		this.codeCommune = codeCommune;
+	public void setIdSujet(String idSujet) {
+		this.idSujet = idSujet;
 	}
 
-	public String getNomCommune() {
-		return nomCommune;
+	public String getTitre() {
+		return titre;
 	}
 
-	public void setNomCommune(String nomCommune) {
-		this.nomCommune = nomCommune;
+	public void setTitre(String titre) {
+		this.titre = titre;
 	}
 
-	public String getCodePostal() {
-		return codePostal;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setCodePostal(String codePostal) {
-		this.codePostal = codePostal;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getLatitude() {
-		return latitude;
+	public String getNbrMinEleves() {
+		return nbrMinEleves;
 	}
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+	public void setNbrMinEleves(String nbrMinEleves) {
+		this.nbrMinEleves = nbrMinEleves;
 	}
 
-	public String getLongitude() {
-		return longitude;
+	public String getNbrMaxEleves() {
+		return nbrMaxEleves;
 	}
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+	public void setNbrMaxEleves(String nbrMaxEleves) {
+		this.nbrMaxEleves = nbrMaxEleves;
+	}
+
+	public String getContratPro() {
+		return contratPro;
+	}
+
+	public void setContratPro(String contratPro) {
+		this.contratPro = contratPro;
+	}
+
+	public String getConfidentialite() {
+		return confidentialite;
+	}
+
+	public void setConfidentialite(String confidentialite) {
+		this.confidentialite = confidentialite;
+	}
+
+	public String getEtat() {
+		return etat;
+	}
+
+	public void setEtat(String etat) {
+		this.etat = etat;
 	}
 	
 	
