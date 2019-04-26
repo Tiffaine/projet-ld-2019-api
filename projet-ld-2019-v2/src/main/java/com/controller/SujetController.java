@@ -40,7 +40,7 @@ public class SujetController {
 			List<String> listeInformations = new ArrayList<String>(); 
 			SujetDao.connectBDD();
 			if(SujetDao.checkUserConnected(identifiantUser)) {
-				listeInformations = SujetDao.selectASubject(identifiantSujet);
+				listeInformations = SujetDao.selectASubject(identifiantSujet, identifiantUser);
 			}
 			System.out.println(listeInformations);
 			return listeInformations; 

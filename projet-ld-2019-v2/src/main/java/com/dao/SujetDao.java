@@ -17,6 +17,8 @@ public class SujetDao {
 	private static String selectSubject = "SELECT titre, confidentialite from `sujet` where idSujet=?";
 	private static String selectSubjectDescription = "SELECT description from `sujet` where idSujet=?";
 	private static String selectPosterWhereSubject = "SELECT idPoster from `poster` where idSujet=?";
+	private static String selectProfesseurSujetWhereSubject = "SELECT idProfesseur from `professeursujet` where idSujet=?";
+	private static String selectEquipeWhereSubject = "SELECT idEquipe from `equipe` where idSujet=?";
 	private static String url = "jdbc:mysql://localhost/somanager?useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&useSSL=false";
 	private static String user = "root";
 	private static String pwd = "";
@@ -71,11 +73,16 @@ public class SujetDao {
 		return newSQL.toString().replaceAll("\"null\"", "null");
 	}
 
-	public List<String> selectASubject(String idSujet) throws SQLException {
+	
+	public List<String> selectASubject(String idSujet, String identifiantUser) throws SQLException {
 		List<String> listeInformations = new ArrayList<String>();
 		PreparedStatement preparedStatement = null;
 		PreparedStatement preparedStatement2 = null;
 		PreparedStatement preparedStatement3 = null;
+		PreparedStatement preparedStatement4 = null;
+		PreparedStatement preparedStatement6 = null;
+		boolean lieAuProjet = false; 
+			
 		preparedStatement = (PreparedStatement) connect
 				.prepareStatement(initialisationRequetePreparee(selectSubject, idSujet));
 		ResultSet result = preparedStatement.executeQuery();
@@ -83,30 +90,80 @@ public class SujetDao {
 		result.next();
 		listeInformations.add(result.getString("titre"));
 		listeInformations.add(result.getString("confidentialite"));
-		
-		//Le descriptif seulement si confidentialite = 1
-		if (result.getString("confidentialite").contentEquals("0")) {
-			preparedStatement2 = (PreparedStatement) connect
-					.prepareStatement(initialisationRequetePreparee(selectSubjectDescription, idSujet));
-			ResultSet result2 = preparedStatement2.executeQuery();
-			result2.next();
-			listeInformations.add(result2.getString("description"));
-		}
-		//Le descriptif si l'utilisateur est lié au sujet 
-		System.out.println("Milieu"+listeInformations);
 
-		//Si oui ou non un poster a ete depose 
+		// Si oui ou non un poster a ete depose
 		preparedStatement3 = (PreparedStatement) connect
 				.prepareStatement(initialisationRequetePreparee(selectPosterWhereSubject, idSujet));
 		ResultSet result3 = preparedStatement3.executeQuery();
 		if (result3 == null) {
 			listeInformations.add("NoPoster");
-		}
-		else {
+		} else {
 			listeInformations.add("PosterDepose");
 		}
-		System.out.println("Fin"+listeInformations);
 
+		// Nom du prof qui suit le projet
+		preparedStatement4 = (PreparedStatement) connect
+				.prepareStatement(initialisationRequetePreparee(selectProfesseurSujetWhereSubject, idSujet));
+		ResultSet result4 = preparedStatement4.executeQuery();
+		result4.next();
+		String idProfesseur = result4.getString("idProfesseur");
+		if(idProfesseur==identifiantUser) {
+			lieAuProjet=true; 
+		}
+		String requeteProf = "SELECT nom,prenom from `utilisateur` where idUtilisateur=" + idProfesseur;
+		Statement stmt = connect.createStatement();
+		ResultSet result5 = stmt.executeQuery(requeteProf);
+		result5.next();
+		listeInformations.add(result5.getString("nom"));
+		listeInformations.add(result5.getString("prenom"));
+
+		// Nom des etudiants sur le projet
+		preparedStatement6 = (PreparedStatement) connect
+				.prepareStatement(initialisationRequetePreparee(selectEquipeWhereSubject, idSujet));
+		ResultSet result6 = preparedStatement6.executeQuery();
+		result6.next();
+		String idEquipe = result6.getString("idEquipe");
+
+		String requeteEquipe = "SELECT idEtudiant from `EtudiantEquipe` where idEquipe=\"" + idEquipe + "\"";
+		ResultSet result7 = stmt.executeQuery(requeteEquipe);
+		String idEtudiant=null;
+		
+		System.out.println("avant while coucou");
+		List<String> listeidEtudiant = new ArrayList<String>();
+		
+		while (result7.next()) {
+			listeidEtudiant.add(result7.getString("idEtudiant"));
+		}
+		for (int j=0;j<listeidEtudiant.size();j++){
+			if(listeidEtudiant.get(j)==identifiantUser) {
+				lieAuProjet=true; 
+			}
+		}
+				
+		String requeteEtudiant = "SELECT nom,prenom from `utilisateur` where idUtilisateur=";
+		for (int i=0;i<listeidEtudiant.size();i++ ) {
+			if(i==0) {
+				requeteEtudiant= requeteEtudiant + listeidEtudiant.get(i);
+			}
+			else if(i>0 && i<listeidEtudiant.size()) {
+				requeteEtudiant= requeteEtudiant + " or idUtilisateur="+ listeidEtudiant.get(i);
+			}
+		}
+		ResultSet result8 = stmt.executeQuery(requeteEtudiant);
+		while(result8.next()) {
+			listeInformations.add(result8.getString("nom"));
+			listeInformations.add(result8.getString("prenom"));
+		}
+		// Le descriptif seulement si confidentialite = 1
+				if (result.getString("confidentialite").contentEquals("0")||lieAuProjet==true) {
+					preparedStatement2 = (PreparedStatement) connect
+							.prepareStatement(initialisationRequetePreparee(selectSubjectDescription, idSujet));
+					ResultSet result2 = preparedStatement2.executeQuery();
+					result2.next();
+					listeInformations.add(result2.getString("description"));
+				}
+		
+		System.out.println("Fin" + listeInformations);
 		return listeInformations;
 	}
 
