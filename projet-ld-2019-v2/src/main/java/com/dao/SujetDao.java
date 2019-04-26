@@ -89,7 +89,8 @@ public class SujetDao {
 			preparedStatement2 = (PreparedStatement) connect
 					.prepareStatement(initialisationRequetePreparee(selectSubjectDescription, idSujet));
 			ResultSet result2 = preparedStatement2.executeQuery();
-			listeInformations.add(result.getString("description"));
+			result2.next();
+			listeInformations.add(result2.getString("description"));
 		}
 		//Le descriptif si l'utilisateur est lié au sujet 
 		System.out.println("Milieu"+listeInformations);
