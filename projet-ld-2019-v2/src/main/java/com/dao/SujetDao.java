@@ -86,9 +86,12 @@ public class SujetDao {
 		preparedStatement = (PreparedStatement) connect
 				.prepareStatement(initialisationRequetePreparee(selectSubject, idSujet));
 		ResultSet result = preparedStatement.executeQuery();
+		listeInformations.add(" idSujet ");
 		listeInformations.add(idSujet);
 		result.next();
+		listeInformations.add("titre");
 		listeInformations.add(result.getString("titre"));
+		listeInformations.add(" niveau confidentialite ");
 		listeInformations.add(result.getString("confidentialite"));
 
 		// Si oui ou non un poster a ete depose
@@ -114,6 +117,7 @@ public class SujetDao {
 		Statement stmt = connect.createStatement();
 		ResultSet result5 = stmt.executeQuery(requeteProf);
 		result5.next();
+		listeInformations.add(" Professeur qui suit le projet : ");
 		listeInformations.add(result5.getString("nom"));
 		listeInformations.add(result5.getString("prenom"));
 
@@ -127,8 +131,6 @@ public class SujetDao {
 		String requeteEquipe = "SELECT idEtudiant from `EtudiantEquipe` where idEquipe=\"" + idEquipe + "\"";
 		ResultSet result7 = stmt.executeQuery(requeteEquipe);
 		String idEtudiant=null;
-		
-		System.out.println("avant while coucou");
 		List<String> listeidEtudiant = new ArrayList<String>();
 		
 		while (result7.next()) {
@@ -151,6 +153,8 @@ public class SujetDao {
 		}
 		ResultSet result8 = stmt.executeQuery(requeteEtudiant);
 		while(result8.next()) {
+			listeInformations.add(" Etudiant membre du projet : ");
+
 			listeInformations.add(result8.getString("nom"));
 			listeInformations.add(result8.getString("prenom"));
 		}
@@ -160,10 +164,11 @@ public class SujetDao {
 							.prepareStatement(initialisationRequetePreparee(selectSubjectDescription, idSujet));
 					ResultSet result2 = preparedStatement2.executeQuery();
 					result2.next();
+					listeInformations.add(" Description sujet : ");
+
 					listeInformations.add(result2.getString("description"));
 				}
 		
-		System.out.println("Fin" + listeInformations);
 		return listeInformations;
 	}
 
