@@ -42,7 +42,6 @@ public class SujetController {
 			if(SujetDao.checkUserConnected(identifiantUser)) {
 				listeInformations = SujetDao.selectASubject(identifiantSujet);
 			}
-			System.out.println("Dans controleur --------------------");
 			System.out.println(listeInformations);
 			return listeInformations; 
 		}
