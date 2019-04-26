@@ -32,6 +32,20 @@ public class SujetController {
 			System.out.println(listeSujets);
 			return listeSujets; 
 		}
+		
+		@RequestMapping(value="/testgetASubject", method=RequestMethod.GET)
+		@ResponseBody
+		public List<String> getASubject(@RequestParam(required = true, value="identifiantSujet") String identifiantSujet, @RequestParam(required=true, value="identifiantUser") String identifiantUser) throws SQLException {
+			SujetDao SujetDao = new SujetDao(); 
+			List<String> listeInformations = new ArrayList<String>(); 
+			SujetDao.connectBDD();
+			if(SujetDao.checkUserConnected(identifiantUser)) {
+				listeInformations = SujetDao.selectASubject(identifiantSujet);
+			}
+			System.out.println("Dans controleur --------------------");
+			System.out.println(listeInformations);
+			return listeInformations; 
+		}
 
 		
 }
