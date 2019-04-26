@@ -22,10 +22,13 @@ import com.dao.*;
 public class SujetController {
 		@RequestMapping(value="/testget", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Sujet> get(@RequestParam(required = false, value="value") String value) throws SQLException {
+		public List<Sujet> get(@RequestParam(required = true, value="value") String identifiantUser) throws SQLException {
 			SujetDao SujetDao = new SujetDao(); 
 			List<Sujet> listeSujets = new ArrayList<Sujet>(); 
-			listeSujets = SujetDao.selectAll();
+			SujetDao.connectBDD();
+			if(SujetDao.checkUserConnected(identifiantUser)) {
+				listeSujets = SujetDao.selectAll();
+			}
 			System.out.println(listeSujets);
 			return listeSujets; 
 		}

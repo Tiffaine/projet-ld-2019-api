@@ -13,14 +13,29 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SujetDao {
 	private static String selectAll = "SELECT * FROM `sujet`";	
+	private static String check = "SELECT idUtilisateur from `Utilisateur`";
+	private static String selectSubject = "SELECT titre, confidentialite from `sujet` where idSujet=?";
 	private static String url = "jdbc:mysql://localhost/somanager?useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&useSSL=false";
 	private static String user = "root";
 	private static String pwd= "";
-	private static Connection connect; 	
-	public static Connection connectBDD() throws SQLException {
+	private static Connection connect; 
+	
+	public Connection connectBDD() throws SQLException {
 		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
 		connect = DriverManager.getConnection(url,user,pwd);	
 		return connect;		
+	}
+	
+	public Boolean checkUserConnected(String identifiantUtilisateur) throws SQLException {
+		Statement stmt = connect.createStatement(); 
+		ResultSet result = stmt.executeQuery(check);
+		Boolean verification=false;
+		while(result.next()) {
+			if(result.getString("idUtilisateur").equals(identifiantUtilisateur)){
+				verification=true;
+			}
+		}
+		return verification;
 	}
 	
 	public List<Sujet> selectAll() throws SQLException{
@@ -28,12 +43,36 @@ public class SujetDao {
 		Statement stmt = connect.createStatement(); 
 		ResultSet result = stmt.executeQuery(selectAll);
 		while(result.next()) { 		
-			listeSujets.add(new Sujet(result.getString("idSujet"),result.getString("titre"),result.getString("description"),result.getString("nbrMinEleves"),result.getString("nbrMaxEleves"),result.getString("contratPro"),result.getString("confidentialite"),result.getString("etat")));
-			System.out.println(result.getString("idSujet"));
-			System.out.println(result.getString("titre"));
-			System.out.println(result.getString("description"));		
+			listeSujets.add(new Sujet(result.getString("idSujet"),result.getString("titre"),result.getString("description"),result.getString("nbrMinEleves"),result.getString("nbrMaxEleves"),result.getString("contratPro"),result.getString("confidentialite"),result.getString("etat")));		
 		}	    
 		return listeSujets;
+	}
+	/**
+	 * Initialise une requête préparée.
+	 * 
+	 * @param connection la connexion à la BDD.
+	 * @param sql la requête SQL.
+	 * @param returnGeneratedKeys le boolean qui permet de générer des ID ou pas.
+	 * @param objets la liste d'objets à insérer dans la requête.
+	 * @return preparedStatement la requête préparée initialisée.
+	 * @throws SQLException
+	 */
+	protected static String initialisationRequetePreparee(String sql, Object... objets) {
+		String[] listeSQL = (sql+" ").split("\\?");
+		StringBuilder newSQL = new StringBuilder(listeSQL[0]);
+		for(int i = 0; i<objets.length; i++) {
+			newSQL.append("\"" + objets[i] + "\"" + listeSQL[i+1]);
+		}
+		return newSQL.toString().replaceAll("\"null\"", "null");
+	}	
+	
+	public List<String> selectASubject(String idSujet) throws SQLException {
+		List<String> listeInformation = new ArrayList<String>(); 
+		PreparedStatement preparedStatement = null;
+		preparedStatement = (PreparedStatement) connect.prepareStatement(initialisationRequetePreparee(selectSubject,idSujet));
+		boolean result = preparedStatement.execute();
+		System.out.println(result);
+		return listeInformation;
 	}
 	
 	
