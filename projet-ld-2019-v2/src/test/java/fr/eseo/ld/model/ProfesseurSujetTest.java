@@ -2,6 +2,7 @@ package fr.eseo.ld.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 
@@ -183,6 +184,8 @@ public class ProfesseurSujetTest {
 		final String resultatAttenduRefuse = "référent";
 		final String resultatTrouveRefuse = professeurSujet.getFonction().getFonction();
 		assertEquals("Mauvaise fonction", resultatAttenduRefuse, resultatTrouveRefuse);
+		
+	
 	}
 	
 	
