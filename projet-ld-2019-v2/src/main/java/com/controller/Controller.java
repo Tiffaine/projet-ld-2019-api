@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.model.Jury;
 import com.model.Sujet;
 import com.dao.*;
 
 @RestController
 //@RequestMapping("/path")  //Permet de rajouter des éléments dans le path 
-public class SujetController {
-		@RequestMapping(value="/testget", method=RequestMethod.GET)
+public class Controller {
+		@RequestMapping(value="/testgetallsujets", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Sujet> get(@RequestParam(required = true, value="value") String identifiantUser) throws Exception {
+		public List<Sujet> getSujets(@RequestParam(required = true, value="identifiantUser") String identifiantUser) throws Exception {
 			SujetDao SujetDao = new SujetDao(); 
 			List<Sujet> listeSujets = new ArrayList<Sujet>(); 
 			SujetDao.connectBDD();
@@ -44,6 +45,19 @@ public class SujetController {
 			}
 			System.out.println(listeInformations);
 			return listeInformations; 
+		}
+		
+		@RequestMapping(value = "/testgetalljurys", method = RequestMethod.GET)
+		@ResponseBody
+		public List<Jury> getJurys(@RequestParam(required = true, value = "identifiantUser") String identifiantUser) throws SQLException {
+			JuryDao JuryDAO = new JuryDao();
+			List<Jury> listeJurys = new ArrayList<Jury>();
+			JuryDAO.connectBDD();
+			if (JuryDAO.checkUserConnected(identifiantUser)) {
+				listeJurys = JuryDAO.selectAll();
+			}
+			System.out.println(listeJurys);
+			return listeJurys;
 		}
 
 		

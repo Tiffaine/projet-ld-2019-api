@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import com.controller.SujetController;
+import com.controller.Controller;
 //TestCommitv2
 @SpringBootApplication
-@ComponentScan(basePackageClasses=SujetController.class)
+@ComponentScan(basePackageClasses=Controller.class)
 public class App 
 {
     public static void main( String[] args )
