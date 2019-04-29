@@ -73,8 +73,9 @@ public class ProfesseurSujet {
 	 * Donne une fonction au ProfesseurSujet.
 	 * 
 	 * @param fonction la fonction donnée au ProfesseurSujet.
+	 * @throws Exception 
 	 */
-	public void setFonctionString(String fonction) {
+	public void setFonctionString(String fonction) throws Exception {
 		if ("co-encadrant".equals(fonction)) {
 			this.fonction = FonctionProfesseurSujet.COENCADRANT;
 		} else if ("consultant".equals(fonction)) {
@@ -84,7 +85,7 @@ public class ProfesseurSujet {
 		} else if ("référent".equals(fonction)) {
 			this.fonction = FonctionProfesseurSujet.REFERENT;
 		} else {
-			throw new BeanException("La fonction professeur/sujet entrée en paramètre n'existe pas !");
+			throw new Exception("La fonction professeur/sujet entrée en paramètre n'existe pas !");
 		}
 	}
 	

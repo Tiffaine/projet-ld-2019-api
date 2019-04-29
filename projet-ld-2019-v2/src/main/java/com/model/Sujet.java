@@ -196,8 +196,9 @@ public class Sujet {
 	 * Donne un �tat au Sujet.
 	 * 
 	 * @param etat l'�tat donn� au Sujet.
+	 * @throws Exception 
 	 */
-	public void setEtatString(String etat) {
+	public void setEtatString(String etat) throws Exception {
 		if ("depose".equals(etat)) {
 			this.etat = EtatSujet.DEPOSE;
 		} else if ("valide".equals(etat)) {
@@ -209,7 +210,7 @@ public class Sujet {
 		} else if ("publie".equals(etat)) {
 			this.etat = EtatSujet.PUBLIE;
 		} else {
-			throw new BeanException("L'�tat entr� en param�tre n'existe pas !");
+			throw new Exception("L'�tat entr� en param�tre n'existe pas !");
 		}
 	}
 

@@ -43,7 +43,7 @@ public class SujetDao {
 		return verification;
 	}
 
-	public List<Sujet> selectAll() throws SQLException {
+	public List<Sujet> selectAll() throws Exception {
 		List<Sujet> listeSujets = new ArrayList<Sujet>();
 		Statement stmt = connect.createStatement();
 		ResultSet result = stmt.executeQuery(selectAll);
@@ -180,7 +180,7 @@ public class SujetDao {
 		return listeInformations;
 	}
 
-	public List<Sujet> selectSujetsProffesseur(String idProfesseur) throws SQLException {
+	public List<Sujet> selectSujetsProffesseur(String idProfesseur) throws Exception {
 		List<Sujet> listeSujets = new ArrayList<Sujet>();
 		Statement stmt = connect.createStatement();
 		ResultSet result = stmt.executeQuery(SQL_selectSujetsProffesseur_DEBUT + idProfesseur);

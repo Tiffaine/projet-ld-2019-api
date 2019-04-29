@@ -22,7 +22,7 @@ import com.dao.*;
 public class SujetController {
 		@RequestMapping(value="/testget", method=RequestMethod.GET)
 		@ResponseBody
-		public List<Sujet> get(@RequestParam(required = true, value="value") String identifiantUser) throws SQLException {
+		public List<Sujet> get(@RequestParam(required = true, value="value") String identifiantUser) throws Exception {
 			SujetDao SujetDao = new SujetDao(); 
 			List<Sujet> listeSujets = new ArrayList<Sujet>(); 
 			SujetDao.connectBDD();
