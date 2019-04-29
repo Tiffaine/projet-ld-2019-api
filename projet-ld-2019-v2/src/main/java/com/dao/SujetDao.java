@@ -171,5 +171,17 @@ public class SujetDao {
 		
 		return listeInformations;
 	}
+	
+	public List<String> selectSujetFromJury(String idProf){
+		List<String> listeInformations = new ArrayList<String>();
+		
+		//Check que l'utilisateur est un prof
+		
+		//Récupération des infos
+		
+		//return
+		return null;
+		
+	}
 
 }
