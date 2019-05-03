@@ -56,6 +56,8 @@ public class ProfesseurTest {
 		assertEquals("Mauvais idProfesseur", resultatAttendu, resultatTrouve);
 	}
 	
+	
+	
 	/**
 	 * Teste la méthode public void setIdProfesseur(Long idProfesseur).
 	 * 
