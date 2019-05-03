@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.model.Sujet;
 import com.mysql.jdbc.PreparedStatement;
+import com.utilitaire.Utilitaire;
 
 public class SujetDao {
 	private static String selectAll = "SELECT * FROM `sujet`";
@@ -20,32 +21,13 @@ public class SujetDao {
 	private static String selectProfesseurSujetWhereSubject = "SELECT idProfesseur from `professeursujet` where idSujet=?";
 	private static String selectEquipeWhereSubject = "SELECT idEquipe from `equipe` where idSujet=?";
 	private static String SQL_selectSujetsProffesseur_DEBUT = "SELECT s.* FROM (sujet s, professeur p, professeursujet ps) WHERE s.idSujet = ps.idSujet AND p.idProfesseur = ps.idProfesseur AND p.idProfesseur=";
-	private static String url = "jdbc:mysql://localhost/somanager?useLegacyDatetimeCode=false&serverTimezone=Europe/Paris&useSSL=false";
-	private static String user = "root";
-	private static String pwd = "";
-	private static Connection connect;
+	
 
-	public Connection connectBDD() throws SQLException {
-		DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-		connect = DriverManager.getConnection(url, user, pwd);
-		return connect;
-	}
-
-	public Boolean checkUserConnected(String identifiantUtilisateur) throws SQLException {
-		Statement stmt = connect.createStatement();
-		ResultSet result = stmt.executeQuery(check);
-		Boolean verification = false;
-		while (result.next()) {
-			if (result.getString("idUtilisateur").equals(identifiantUtilisateur)) {
-				verification = true;
-			}
-		}
-		return verification;
-	}
+	
 
 	public List<Sujet> selectAll() throws Exception {
 		List<Sujet> listeSujets = new ArrayList<Sujet>();
-		Statement stmt = connect.createStatement();
+		Statement stmt = Utilitaire.connect.createStatement();
 		ResultSet result = stmt.executeQuery(selectAll);
 		while (result.next()) {
 			Sujet sujet = new Sujet();
@@ -95,7 +77,7 @@ public class SujetDao {
 		PreparedStatement preparedStatement4 = null;
 		PreparedStatement preparedStatement6 = null;
 		boolean lieAuProjet = false;
-		preparedStatement = (PreparedStatement) connect
+		preparedStatement = (PreparedStatement) Utilitaire.connect
 				.prepareStatement(initialisationRequetePreparee(selectSubject, idSujet));
 		ResultSet result = preparedStatement.executeQuery();
 		listeInformations.add(" idSujet ");
@@ -107,7 +89,7 @@ public class SujetDao {
 		listeInformations.add(result.getString("confidentialite"));
 
 // Si oui ou non un poster a ete depose
-		preparedStatement3 = (PreparedStatement) connect
+		preparedStatement3 = (PreparedStatement) Utilitaire.connect
 				.prepareStatement(initialisationRequetePreparee(selectPosterWhereSubject, idSujet));
 		ResultSet result3 = preparedStatement3.executeQuery();
 		if (result3 == null) {
@@ -117,7 +99,7 @@ public class SujetDao {
 		}
 
 // Nom du prof qui suit le projet
-		preparedStatement4 = (PreparedStatement) connect
+		preparedStatement4 = (PreparedStatement) Utilitaire.connect
 				.prepareStatement(initialisationRequetePreparee(selectProfesseurSujetWhereSubject, idSujet));
 		ResultSet result4 = preparedStatement4.executeQuery();
 		result4.next();
@@ -126,7 +108,7 @@ public class SujetDao {
 			lieAuProjet = true;
 		}
 		String requeteProf = "SELECT nom,prenom from `utilisateur` where idUtilisateur=" + idProfesseur;
-		Statement stmt = connect.createStatement();
+		Statement stmt = Utilitaire.connect.createStatement();
 		ResultSet result5 = stmt.executeQuery(requeteProf);
 		result5.next();
 		listeInformations.add(" Professeur qui suit le projet : ");
@@ -134,7 +116,7 @@ public class SujetDao {
 		listeInformations.add(result5.getString("prenom"));
 
 // Nom des etudiants sur le projet
-		preparedStatement6 = (PreparedStatement) connect
+		preparedStatement6 = (PreparedStatement) Utilitaire.connect
 				.prepareStatement(initialisationRequetePreparee(selectEquipeWhereSubject, idSujet));
 		ResultSet result6 = preparedStatement6.executeQuery();
 		result6.next();
@@ -169,7 +151,7 @@ public class SujetDao {
 		}
 // Le descriptif seulement si confidentialite = 1
 		if (result.getString("confidentialite").contentEquals("0") || lieAuProjet == true) {
-			preparedStatement2 = (PreparedStatement) connect
+			preparedStatement2 = (PreparedStatement) Utilitaire.connect
 					.prepareStatement(initialisationRequetePreparee(selectSubjectDescription, idSujet));
 			ResultSet result2 = preparedStatement2.executeQuery();
 			result2.next();
@@ -182,7 +164,7 @@ public class SujetDao {
 
 	public List<Sujet> selectSujetsProffesseur(String idProfesseur) throws Exception {
 		List<Sujet> listeSujets = new ArrayList<Sujet>();
-		Statement stmt = connect.createStatement();
+		Statement stmt = Utilitaire.connect.createStatement();
 		ResultSet result = stmt.executeQuery(SQL_selectSujetsProffesseur_DEBUT + idProfesseur);
 		while (result.next()) {
 			Sujet sujet = new Sujet();
