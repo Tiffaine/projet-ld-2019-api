@@ -1,10 +1,7 @@
 package com.controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,22 +67,20 @@ public class Controller {
 			if (Utilitaire.checkUserConnected(identifiantUser)) {
 				listeJurys = JuryDAO.selectAll();
 			}
-			System.out.println(listeJurys);
 			return listeJurys;
 		}
 
-		@RequestMapping(value = "/testgetalljurys", method = RequestMethod.GET)
+		@RequestMapping(value = "/testgetpathImagePoster", method = RequestMethod.GET)
 		@ResponseBody
 		public String getImagePoster(@RequestParam(required = true, value = "identifiantUser") String identifiantUser, 
 				@RequestParam(required = true, value = "idPoster") String idPoster) throws SQLException {
-			JuryDao JuryDAO = new JuryDao();
-			List<Jury> listeJurys = new ArrayList<Jury>();
+			PosterDao posterDao = new PosterDao();
+			String path = "";
 			Utilitaire.connectBDD();
 			if (Utilitaire.checkUserConnected(identifiantUser)) {
-				listeJurys = JuryDAO.selectAll();
+				path = posterDao.getPathImagePoster(idPoster);
 			}
-			System.out.println(listeJurys);
-			return "";
+			return path;
 		}
 		
 }
