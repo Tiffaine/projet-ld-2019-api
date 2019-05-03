@@ -47,6 +47,19 @@ public class Controller {
 			return listeInformations; 
 		}
 		
+		@RequestMapping(value = "/testgetSubjectsProfessor", method = RequestMethod.GET)
+		@ResponseBody
+		public List<Sujet> getSubjectsProfessor(@RequestParam(required = true, value = "identifiantProf") String identifiantProfesseur) throws Exception {
+			SujetDao sujetDAO = new SujetDao();
+			List<Sujet> listeSujetsProfesseurs = new ArrayList<Sujet>();
+			sujetDAO.connectBDD();
+			if (sujetDAO.checkUserConnected(identifiantProfesseur)) {	
+					listeSujetsProfesseurs = sujetDAO.selectSujetsProffesseur(identifiantProfesseur);
+			}
+			
+			return listeSujetsProfesseurs;
+		}
+		
 		@RequestMapping(value = "/testgetalljurys", method = RequestMethod.GET)
 		@ResponseBody
 		public List<Jury> getJurys(@RequestParam(required = true, value = "identifiantUser") String identifiantUser) throws SQLException {
